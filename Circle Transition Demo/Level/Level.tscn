@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://CircleTransition.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Level/background.png" type="Texture" id=4]
+[ext_resource path="res://battlenet.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Node2D
+
+
+onready var circle_transition = $CircleTransition
+
+
+func _ready() -> void:
+	circle_transition.visible = true
+	circle_transition.transition_out()
+
+
+func _on_Button_pressed() -> void:
+	circle_transition.transition_in()
+
+
+func _on_CircleTransition_transition_in_done() -> void:
+	get_tree().change_scene(\"res://Menu/Menu.tscn\")
+"
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 5 )
+
+[node name="Level" type="Node2D"]
+script = SubResource( 2 )
+
+[node name="background" type="Sprite" parent="."]
+position = Vector2( 120, 80 )
+texture = ExtResource( 4 )
+
+[node name="Button" parent="." instance=ExtResource( 2 )]
+
+[node name="Label" type="Label" parent="."]
+margin_left = 100.0
+margin_top = 65.0
+margin_right = 140.0
+margin_bottom = 79.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Level"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CircleTransition" parent="." instance=ExtResource( 3 )]
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[connection signal="transition_in_done" from="CircleTransition" to="." method="_on_CircleTransition_transition_in_done"]
